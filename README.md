@@ -52,7 +52,7 @@ Option 1: Deploy from root monorepo
 4. Set the output directory to:
    - `client/dist`
 5. Add an environment variable:
-   - `VITE_API_URL=https://your-backend-url/api/bookings`
+   - `VITE_API_URL=https://marwadi-meal-club-server-production.up.railway.app/api/bookings`
 
 Option 2: Deploy directly from `client`
 1. Import the `client` folder in Vercel.
@@ -73,7 +73,7 @@ Option 2: Deploy directly from `client`
 Example frontend URL setting:
 
 ```
-VITE_API_URL=https://your-railway-service.up.railway.app/api/bookings
+VITE_API_URL=https://marwadi-meal-club-server-production.up.railway.app/api/bookings
 ```
 
 ### Frontend (Vercel)
@@ -82,7 +82,7 @@ VITE_API_URL=https://your-railway-service.up.railway.app/api/bookings
 2. In Vercel, import the `client` folder as a new project.
 3. Set the build command to `npm run build` and the output directory to `dist`.
 4. Add an environment variable:
-   - `VITE_API_URL=https://your-railway-service.up.railway.app/api/bookings`
+   - `VITE_API_URL=https://marwadi-meal-club-server-production.up.railway.app/api/bookings`
 
 ### Notes
 
