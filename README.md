@@ -68,7 +68,11 @@ Option 2: Deploy directly from `client`
 4. Railway should detect `package.json`. If it asks for a start command, use:
    - `npm start`
 5. Railway automatically provides the `PORT` environment variable.
-6. After deployment, copy the Railway service URL and use it in the frontend `VITE_API_URL`.
+6. Add a MySQL database plugin in Railway and copy the database connection string.
+7. If Railway does not automatically expose the connection var, add it manually in `Variables` as:
+   - `DATABASE_URL`
+   - value: `mysql://user:password@host:port/database`
+8. After deployment, copy the Railway service URL and use it in the frontend `VITE_API_URL`.
 
 Example frontend URL setting:
 

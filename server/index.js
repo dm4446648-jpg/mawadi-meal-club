@@ -10,6 +10,7 @@ app.use(cors())
 app.use(express.json())
 
 const dbUrl = process.env.DATABASE_URL || process.env.RAILWAY_MYSQL_CONNECTION_URL || process.env.MYSQL_URL || process.env.DATABASE_URI
+const dbUrlSource = process.env.DATABASE_URL ? 'DATABASE_URL' : process.env.RAILWAY_MYSQL_CONNECTION_URL ? 'RAILWAY_MYSQL_CONNECTION_URL' : process.env.MYSQL_URL ? 'MYSQL_URL' : process.env.DATABASE_URI ? 'DATABASE_URI' : 'none'
 
 function parseDatabaseUrl(url) {
   try {
@@ -36,6 +37,11 @@ const defaultDbConfig = {
 }
 
 const dbConfig = dbUrl ? parseDatabaseUrl(dbUrl) || defaultDbConfig : defaultDbConfig
+
+console.log('Database URL source:', dbUrlSource)
+if (!dbUrl) {
+  console.warn('No database URL environment variable found. Using fallback local DB config:', defaultDbConfig)
+}
 
 let db = null
 let dbReady = false
