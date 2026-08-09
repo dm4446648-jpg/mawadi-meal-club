@@ -1,0 +1,12 @@
+{
+  "name": "marwadi-meal-club",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "build": "cd client && npm run build",
+    "start": "cd server && npm start"
+  }
+}
