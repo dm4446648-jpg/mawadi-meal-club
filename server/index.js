@@ -34,6 +34,11 @@ async function initDatabase() {
       createdAt DATETIME NOT NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`)
 
+    const [columns] = await db.execute("SHOW COLUMNS FROM bookings LIKE 'createdAt'")
+    if (columns.length === 0) {
+      await db.execute("ALTER TABLE bookings ADD COLUMN createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP")
+    }
+
     dbReady = true
     console.log('Connected to MySQL database and ensured bookings table exists.')
   } catch (error) {
@@ -77,6 +82,20 @@ app.post('/api/bookings', async (req, res) => {
   const booking = { id: bookings.length + 1, ...bookingData }
   bookings.push(booking)
   res.json({ message: 'Booking successful! We will contact you soon.', booking })
+})
+
+app.get('/api/bookings', async (req, res) => {
+  if (dbReady) {
+    try {
+      const [rows] = await db.execute('SELECT * FROM bookings ORDER BY id DESC')
+      return res.json({ bookings: rows })
+    } catch (error) {
+      console.error('MySQL select failed:', error)
+      return res.status(500).json({ message: 'Could not read bookings from database.' })
+    }
+  }
+
+  return res.json({ bookings })
 })
 
 app.use((req, res) => {
