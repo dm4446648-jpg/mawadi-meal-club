@@ -9,22 +9,56 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-const dbHost = process.env.DB_HOST || '127.0.0.1'
-const dbUser = process.env.DB_USER || 'root'
-const dbPassword = process.env.DB_PASSWORD || ''
-const dbName = process.env.DB_NAME || 'marwadi_meal_club'
-const dbPort = Number(process.env.DB_PORT || 3306)
+const dbUrl = process.env.DATABASE_URL || process.env.RAILWAY_MYSQL_CONNECTION_URL || process.env.MYSQL_URL || process.env.DATABASE_URI
+
+function parseDatabaseUrl(url) {
+  try {
+    const parsed = new URL(url)
+    return {
+      host: parsed.hostname,
+      port: Number(parsed.port || 3306),
+      user: decodeURIComponent(parsed.username),
+      password: decodeURIComponent(parsed.password),
+      database: parsed.pathname?.slice(1) || 'marwadi_meal_club',
+    }
+  } catch (error) {
+    console.warn('Invalid database URL:', url)
+    return null
+  }
+}
+
+const defaultDbConfig = {
+  host: process.env.DB_HOST || '127.0.0.1',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'marwadi_meal_club',
+  port: Number(process.env.DB_PORT || 3306),
+}
+
+const dbConfig = dbUrl ? parseDatabaseUrl(dbUrl) || defaultDbConfig : defaultDbConfig
 
 let db = null
 let dbReady = false
 
 async function initDatabase() {
   try {
-    const rootConnection = await mysql.createConnection({ host: dbHost, user: dbUser, password: dbPassword, port: dbPort })
-    await rootConnection.query('CREATE DATABASE IF NOT EXISTS `' + dbName + '`')
+    const rootConnection = await mysql.createConnection({
+      host: dbConfig.host,
+      user: dbConfig.user,
+      password: dbConfig.password,
+      port: dbConfig.port,
+    })
+
+    await rootConnection.query('CREATE DATABASE IF NOT EXISTS `' + dbConfig.database + '`')
     await rootConnection.end()
 
-    db = await mysql.createPool({ host: dbHost, user: dbUser, password: dbPassword, database: dbName, port: dbPort })
+    db = await mysql.createPool({
+      host: dbConfig.host,
+      user: dbConfig.user,
+      password: dbConfig.password,
+      database: dbConfig.database,
+      port: dbConfig.port,
+    })
     await db.execute(`CREATE TABLE IF NOT EXISTS bookings (
       id INT AUTO_INCREMENT PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
