@@ -10,21 +10,35 @@ Full stack website for a tiffin service business.
 ## Local setup
 
 1. Open terminal in `d:\MARAWADI MEAL CLUB`.
-2. Install dependencies:
+2. Start XAMPP and enable MySQL.
+3. Install dependencies:
    - `cd client && npm install`
    - `cd ../server && npm install`
-3. Run backend:
+4. Create `server/.env` with your MySQL settings.
+5. Run backend:
    - `cd server && npm run dev`
-4. Run frontend:
+6. Run frontend:
    - `cd ../client && npm run dev`
 
 ## Environment variables
 
-Create `.env` in `client` with:
+Create `client/.env` with:
 
 ```
 VITE_API_URL=http://localhost:5000/api/bookings
 ```
+
+Create `server/.env` with:
+
+```
+DB_HOST=127.0.0.1
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=marwadi_meal_club
+DB_PORT=3306
+```
+
+If you use XAMPP, start the MySQL service before running the server.
 
 ## Deployment notes
 
