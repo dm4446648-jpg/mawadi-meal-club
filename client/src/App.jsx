@@ -26,7 +26,7 @@ const reviews = [
 function App() {
   const [form, setForm] = useState({ name: '', phone: '', address: '', plan: 'one-time' })
   const [status, setStatus] = useState({ loading: false, success: '', error: '' })
-  const apiUrl = import.meta.env.VITE_API_URL || 'https://marwadi-meal-club-server-production.up.railway.app/api/bookings'
+  const apiUrl = import.meta.env.VITE_API_URL || 'mysql://root:gDVElynkHKNycGyzjhYWPYpnTAuVUtIv@mysql.railway.internal:3306/railway.railway.app/api/bookings'
 
   useEffect(() => {
     document.title = 'Marwadi Meal Club'
